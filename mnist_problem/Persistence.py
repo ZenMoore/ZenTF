@@ -69,3 +69,31 @@ with tf.Session() as sess:
 #加载滑动平均值: 使用自动生成的字典
 print(ema.variables_to_restore()) #字典
 saver = tf.train.Saver(ema.variables_to_restore())
+
+
+
+#  下面的代码解决两个问题：
+# 1. Saver保存了全部信息，而有时候很多信息并不需要(比如变量初始化以及辅助节点等等)
+# 2. 将变量的取值和计算图结构分成不同的文件保存不方便
+# 使用convert_variables_to_constants函数可以将图中的变量以及取值以常量的方式保存，这样整个计算图可以存在一个文件中
+
+import tensorflow as tf
+from tensorflow.python.framework import graph_util
+
+v1 = tf.Variable(tf.constant(1.0, shape=[1]), name="v1")
+v2 = tf.Variable(tf.constant(2.0, shape=[1]), name="v2")
+result = v1 + v2
+
+init_op = tf.global_variable_initializer()
+
+with tf.Session() as sess:
+    sess.run(init_op)
+    #导出当前计算图中的Graph_def部分，只需要这一部分就能完成从输入层到输出层的计算过程
+    graph_def = tf.get_default_graph().as_graph_def()
+    #将图中的变量值转化为常量，同时去掉不必要的节点
+    #最后一个参数['add']给出了需要保存的节点的名字，注意是节点名字所以没有:0
+    output_graph_def = graph_util.convert_variables_to_constants(sess, graph_def, ['add'])
+
+    with tf.gfile.GFile("model_saved/combined_model.pb", "wb") as f:
+        f.write(output_graph_def.SerializeToString())
+

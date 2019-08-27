@@ -40,12 +40,14 @@ def train(mnist):
     with tf.Session() as sess:
         tf.global_variables_initializer().run()
 
+        #在训练过程中不再测试模型在验证数据上的表现，验证和测试的过程将会有一个独立的程序完成
         for i in range(TRANING_STEPS):
             xs, ys = mnist.train.next_batch(BATCH_SIZE)
             _, loss_value, step = sess.run([train_op, loss, global_step], feed_dict={x: xs, y_: ys})
 
             if i % 1000 == 0:
                 print("After %d training step(s), loss on training batch is %g ."%(step, loss_value))
+                #给出global_step参数可以让每个被保存模型的文件名末尾加上训练的轮数，比如model.ckpt=1000表示训练1000论之后的模型
                 saver.save(sess, os.path.join(MODEL_SAVE_PATH, MODEL_NAME), global_step=global_step)
 
 def main(argv = None):

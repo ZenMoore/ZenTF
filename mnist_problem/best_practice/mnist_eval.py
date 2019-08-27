@@ -13,6 +13,7 @@ def evaluate(mnist):
         y_ = tf.placeholder(tf.float32, shape=[None, mnist_inference.OUTPUT_NODE], name="y-input")
         validate_feed = {x: mnist.validation.images, y_: mnist.validation.labels}
 
+        #因为测试时不关注正则化损失的值，所以这里用于计算正则化损失的函数被设置为None
         y = mnist_inference.inference(x, None)
 
         correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
@@ -24,6 +25,7 @@ def evaluate(mnist):
 
         while True:
             with tf.Session() as sess:
+                # 这个函数会通过checkpoint文件自动找到目录中最新模型的文件名
                 ckpt = tf.train.get_checkpoint_state(mnist_train.MODEL_SAVE_PATH)
                 if ckpt and ckpt.model_checkpoint_path:
                     saver.restore(sess, ckpt.model_checkpoint_path)

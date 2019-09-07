@@ -11,14 +11,14 @@ MOVING_AVERAGE_DECAY = 0.99
 REGULARIZATION_RATE = 0.0001
 TRANING_STEPS = 30000
 
-MODEL_SAVE_PATH = "best_model_saved/"
+MODEL_SAVE_PATH = "LeNet_model_saved/"
 MODEL_NAME = "model.ckpt"
 
 def train(mnist):
 
     #todo 这里的 BATCH_SIZE改为None会出错，可能是因为在计算图生成的而过程中，reshape节点需要事先知道BATCH_SIZE
     x = tf.placeholder(dtype=tf.float32, shape=[BATCH_SIZE, mnist_inference.IMAGE_SIZE,mnist_inference.IMAGE_SIZE,mnist_inference.NUM_CHANNELS], name="x-input")
-    y_ = tf.placeholder(dtype=tf.float32, shape=[BATCH_SIZE, mnist_inference.OUTPUT_NODE], name="y-input")
+    y_ = tf.placeholder(dtype=tf.float32, shape=[None, mnist_inference.OUTPUT_NODE], name="y-input")
 
     regularizer = tf.contrib.layers.l2_regularizer(REGULARIZATION_RATE)
     y = mnist_inference.inference(x, True,  regularizer)
@@ -46,10 +46,11 @@ def train(mnist):
         for i in range(TRANING_STEPS):
             xs, ys = mnist.train.next_batch(BATCH_SIZE)
 
-            reshaped_xs = np.reshape(xs, [BATCH_SIZE, mnist_inference.IMAGE_SIZE, mnist_inference.IMAGE_SIZE,mnist_inference.NUM_CHANNELS])
+            reshaped_xs = np.reshape(xs, (BATCH_SIZE, mnist_inference.IMAGE_SIZE, mnist_inference.IMAGE_SIZE,mnist_inference.NUM_CHANNELS))
 
             _, loss_value, step = sess.run([train_op, loss, global_step], feed_dict={x: reshaped_xs, y_: ys})
 
+            print(step)
             if i % 1000 == 0:
                 print("After %d training step(s), loss on training batch is %g ."%(step, loss_value))
                 #给出global_step参数可以让每个被保存模型的文件名末尾加上训练的轮数，比如model.ckpt=1000表示训练1000论之后的模型

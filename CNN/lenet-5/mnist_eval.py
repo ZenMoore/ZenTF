@@ -9,7 +9,7 @@ EVAL_INTERVAL_SECS = 10
 def evaluate(mnist):
     #todo 定义图，以便于后续加载模型时存在此图中 (是这个样子吗？)
     with tf.Graph().as_default() as g:
-        x = tf.placeholder(tf.float32, shape=[None, mnist_inference.IMAGE_SIZE,mnist_inference.IMAGE_SIZE,mnist_inference.NUM_CHANNELS], name="x-input")
+        x = tf.placeholder(tf.float32, shape=[mnist_train.BATCH_SIZE, mnist_inference.IMAGE_SIZE,mnist_inference.IMAGE_SIZE,mnist_inference.NUM_CHANNELS], name="x-input")
         y_ = tf.placeholder(tf.float32, shape=[None, mnist_inference.OUTPUT_NODE], name="y-input")
         validate_feed = {x: mnist.validation.images, y_: mnist.validation.labels}
 

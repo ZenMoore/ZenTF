@@ -15,7 +15,7 @@ with slim.arg_scope([slim.conv2d, slim.max_pool2d, slim.avg_pool2d], stride= 1, 
     with tf.variable_scope('Mixed_7c'):
         with tf.variable_scope('branch_0'):
 
-            #conv2d有三个参数必填：第一个为输入矩阵，第二个为当前卷积层过滤器深度，第三个为过滤器尺寸
+            #conv2d有三个参数必填：第一个为输入矩阵，第二个为当前卷积层过滤器深度，第三个为过滤器尺寸.
             branch_0 = slim.conv2d(net, 320, [1, 1], scope='conv2d_0a_1x1')
 
         with tf.variable_scope('branch_1'):

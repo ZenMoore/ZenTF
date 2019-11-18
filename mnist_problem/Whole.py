@@ -90,7 +90,7 @@ def train(mnist):
 
 #主程序入口
 def main(argv=None):
-    mnist = input_data.read_data_sets("/MNIST_data", one_hot=True)
+    mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
     train(mnist)
 
 #TF提供一个主程序入口，tf.app.run会调用上面定义的main函数

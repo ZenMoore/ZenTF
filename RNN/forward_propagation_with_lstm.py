@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-lstm_hidden_size = 10 # lstm结构是一个神经网络，包含多个隐藏层，这里包含10个lstm单元
+lstm_hidden_size = 10 # lstm结构是一个神经网络，包含多个隐藏节点，这里包含10个节点
 batch_size = 10
 num_steps = 10 # 循环神经网络展开的序列长度
 input = []  # 输入序列

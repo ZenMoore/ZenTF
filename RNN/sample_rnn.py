@@ -3,7 +3,7 @@ import tensorflow as tf
 import matplotlib as mpl #数学绘图
 from matplotlib import pyplot as plt
 
-mpl.use("Agg") #选择画图引擎
+# mpl.use('Agg') #选择画图引擎
 
 HIDDEN_SIZE = 30
 NUM_LAYERS = 2
@@ -25,7 +25,7 @@ def generate_data(seq):
         X.append([seq[i : i+TIMESTEPS]])
         y.append([seq[i+TIMESTEPS]])
 
-        return np.array(X, dtype= np.float32), np.array(y, dtype= np.float32)
+    return np.array(X, dtype= np.float32), np.array(y, dtype= np.float32)
 
 #注意：这里传入的X已经是TIMESTEPS长度了，事先已经使用上面的这个函数或者其他方式截取了TIMESTEPS
 def lstm_model(X, y, is_training):
